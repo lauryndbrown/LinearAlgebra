@@ -72,13 +72,10 @@ class Vector:
         self.coordinates = tuple([round_coordinate(coordinate) for coordinate in self.coordinates])
 
     def __str__(self):
-        return "Vector: {}".format(self._to_floats())
+        return "Vector: {}".format(tuple([float(x) for x in self.coordinates]))
 
     def __repr__(self):
         return repr(self.coordinates)
-
-    def _to_floats(self):
-        return tuple([float(x) for x in self.coordinates])
 
     def __eq__(self, other):
         return self.coordinates==other.coordinates
