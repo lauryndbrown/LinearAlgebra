@@ -29,10 +29,13 @@ class Vector:
         return Vector(products)
 
     def round_coordinates(self, precision):
-        def round_coordinate(coordinate, precision):
-            return float(Decimal(str(coordinate)).quantize(Decimal(precision_str), rounding=ROUND_HALF_UP))
+        """Round coordinates in a vector
+           Uses decimal.ROUND_HALF_UP
+        """
         if isinstance(precision, collections.Iterable):
             raise TypeError('value must not be iterable')
+        def round_coordinate(coordinate, precision):
+            return float(Decimal(str(coordinate)).quantize(Decimal(precision_str), rounding=ROUND_HALF_UP))
         precision_str = '.{:0>{prec}d}'.format(1,prec=precision)
         self.coordinates = tuple([round_coordinate(coordinate, precision) for coordinate in self.coordinates])
 
