@@ -25,6 +25,8 @@ class VectorTestCase(unittest.TestCase):
         vector = Vector((1,2,3 ))
         self.assertEqual(str(vector), "(1, 2, 3)",'str does not work')
     def test_eq_three_dimensions(self):
-        self.assertEqual(Vector((1,2,3)), Vector((1,2,3)),'eq does not work')
+        self.assertEqual(Vector((1,2,3))==Vector((1,2,3)), True,'eq does not work')
+        self.assertEqual(Vector((-1,2,3))==Vector((1,2,3)), False,'eq does not work')
     def test_eq_one_dimension(self):
-        self.assertEqual(Vector((1,)), Vector((1,)),'eq does not work')
+        self.assertEqual(Vector((1,))==Vector((1,)), True, 'eq does not work')
+        self.assertEqual(Vector((1,))==Vector((-1,)), False, 'eq does not work')
