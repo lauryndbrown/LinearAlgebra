@@ -194,3 +194,85 @@ class VectorTestCase(unittest.TestCase):
     def test_angle_assert(self):
         with self.assertRaises(ZeroDivisionError, msg='angle does not throw ZeroDivisionError if magnitude of either vector is 0'):
             Vector((0,0,0)).angle(Vector((1,2,3)))
+
+    def test_is_parallel_simple(self):
+        vector = self.vector3d.scalar_multiply(0.5)
+        vector2 = Vector((6,29,100))
+        result = vector.is_parallel(self.vector3d)
+        result2 = vector2.is_parallel(self.vector3d)
+        self.assertEqual(result, True, 'is_parallel does not work')
+        self.assertEqual(result2, False, 'is_parallel does not work')
+
+    def test_is_parallel_zero(self):
+        vector = Vector((0,0,0))
+        result = vector.is_parallel(self.vector3d)
+        self.assertEqual(result, True, 'is_parallel does not work')
+
+    def test_zero_is_parallel_zero(self):
+        vector = Vector((0,0,0))
+        result = vector.is_parallel(vector)
+        self.assertEqual(result, True, 'is_parallel does not work')
+
+    def test_is_parallel_to_itself(self):
+        result = self.vector3d.is_parallel(self.vector3d)
+        self.assertEqual(result, True, 'is_parallel does not work')
+
+    def test_is_parallel_float_2d(self):
+        v1 = Vector((-7.579, -7.88))
+        v2 = Vector((22.737, 23.64))
+        self.assertEqual(v1.is_parallel(v2), True, 'is_parallel does not work')
+
+    def test_is_parallel_float_3d(self):
+        v1 = Vector((-2.029, 9.97, 4.172))
+        v2 = Vector((-9.231, -6.639, -7.245))
+        self.assertEqual(v1.is_parallel(v2), False, 'is_parallel does not work')
+
+    def test_is_parallel_float_3d_2(self):
+        v1 = Vector((-2.328, -7.284, -1.214))
+        v2 = Vector((-1.821, 1.072, -2.94))
+        self.assertEqual(v1.is_parallel(v2), False, 'is_parallel does not work')
+        
+    def test_is_parallel_float_2d_2(self):
+        v1 = Vector((2.118, 4.827))
+        v2 = Vector((0,0))
+        self.assertEqual(v1.is_parallel(v2), True, 'is_parallel does not work')
+
+    def test_is_orthogonal_simple(self):
+        v1 = Vector((0,1))
+        v2 = Vector((4,0))
+        v3 = Vector((4,1))
+        v4 = Vector((1,-4))
+        self.assertEqual(v1.is_orthogonal(v2), True, 'is_orthogonal does not work')
+        self.assertEqual(v3.is_orthogonal(v2), False, 'is_orthogonal does not work')
+        self.assertEqual(v4.is_orthogonal(v3), True, 'is_orthogonal does not work')
+        
+    def test_is_orthogonal_zero_with_itself(self):
+        v1 = Vector((0,0))
+        v2 = Vector((0,0))
+        self.assertEqual(v1.is_orthogonal(v2), True, 'is_orthogonal does not work')
+
+    def test_is_orthogonal_zero(self):
+        v1 = Vector((0,0))
+        v2 = Vector((99,34))
+        self.assertEqual(v1.is_orthogonal(v2), True, 'is_orthogonal does not work')
+
+    def test_is_orthogonal_float_2d(self):
+        v1 = Vector((-7.579, -7.88))
+        v2 = Vector((22.737, 23.64))
+        self.assertEqual(v1.is_orthogonal(v2), False, 'is_orthogonal does not work')
+
+    def test_is_orthogonal_float_3d(self):
+        v1 = Vector((-2.029, 9.97, 4.172))
+        v2 = Vector((-9.231, -6.639, -7.245))
+        self.assertEqual(v1.is_orthogonal(v2), False, 'is_orthogonal does not work')
+
+    def test_is_orthogonal_float_3d_2(self):
+        v1 = Vector((-2.328, -7.284, -1.214))
+        v2 = Vector((-1.821, 1.072, -2.94))
+        self.assertEqual(v1.is_orthogonal(v2), True, 'is_orthogonal does not work')
+        
+    def test_is_orthogonal_float_2d_2(self):
+        v1 = Vector((2.118, 4.827))
+        v2 = Vector((0,0))
+        self.assertEqual(v1.is_orthogonal(v2), True, 'is_orthogonal does not work')
+

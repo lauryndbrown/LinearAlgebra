@@ -60,6 +60,30 @@ class Vector:
             return theta
         else:
             return math.degrees(theta)
+    def is_parallel(self, vector):
+        """Checks if vectors are parallel
+        Two vectors are parallel if one is a scalar
+        multiple of the other.
+        """
+        #Zero vector is always parallel
+        if self.magnitude()==0 or vector.magnitude()==0:
+            return True
+        multiple_a_b = True
+        multiple_b_a = True
+        for a,b in zip(vector.coordinates, self.coordinates):
+            if a%b!=0:
+                multiple_a_b = False
+            if b%a!=0:
+                multiple_b_a = False
+            if not multiple_a_b and not multiple_b_a:
+                break
+        return multiple_a_b or multiple_b_a
+    def is_orthogonal(self, vector):
+        """Checks if vectors are orthogonal
+        Two vectors are orthogonal if their 
+        dot product is zero
+        """
+        return self.dot_product(vector)==0
     def round_coordinates(self, precision):
         """Round coordinates in a vector
            Uses decimal.ROUND_HALF_UP
