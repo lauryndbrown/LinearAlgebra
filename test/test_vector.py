@@ -30,20 +30,24 @@ class VectorTestCase(unittest.TestCase):
                 Vector( 1 )
     
     def test_repr_single_dimension(self):
-        self.assertEqual(repr(self.vector1d), "(1,)",'repr does not work')
+        self.assertEqual(repr(self.vector1d), "(Decimal('1'),)",'repr does not work')
     
     def test_repr_three_dimensions(self):
-        self.assertEqual(repr(self.vector3d), "(1, 2, 3)",'repr does not work')
+        self.assertEqual(repr(self.vector3d), "(Decimal('1'), Decimal('2'), Decimal('3'))",'repr does not work')
     
     def test_str_single_dimension(self):
-        self.assertEqual(str(self.vector1d), "Vector: (1,)",'str does not work')
+        self.assertEqual(str(self.vector1d), "Vector: (1.0,)",'str does not work')
     
     def test_str_three_dimensions(self):
-        self.assertEqual(str(self.vector3d), "Vector: (1, 2, 3)",'str does not work')
+        self.assertEqual(str(self.vector3d), "Vector: (1.0, 2.0, 3.0)",'str does not work')
+
     def test_eq_three_dimensions(self):
         self.assertEqual(self.vector3d==Vector((1,2,3)), True,'eq does not work')
         self.assertEqual(Vector((-1,2,3))==self.vector3d, False,'eq does not work')
     
+    def test_eq_float_3d(self):
+        self.assertEqual(Vector((1.234, 4.543, 9.000)), Vector((1.234, 4.543, 9.000)), 'eq does not work')
+
     def test_eq_one_dimension(self):
         self.assertEqual(self.vector1d==Vector((1,)), True, 'eq does not work')
         self.assertEqual(self.vector1d==Vector((-1,)), False, 'eq does not work')
@@ -51,7 +55,7 @@ class VectorTestCase(unittest.TestCase):
     def test_round_coordinates(self):
         vector = Vector((1.00001, 2.12348, -8274.125, 2))
         vector.round_coordinates(2)
-        self.assertEqual(vector.coordinates, (1.00, 2.12, -8274.13, 2.00), 'round_coordinates does not work')
+        self.assertEqual(vector.coordinates, (Decimal('1.00'), Decimal('2.12'), Decimal('-8274.13'), Decimal('2.00')), 'round_coordinates does not work')
     
     def test_round_coordinates_assert(self):
         with self.assertRaises(TypeError, msg='round_coordinates does not throw TypeError if precision is iterable'):
@@ -135,11 +139,26 @@ class VectorTestCase(unittest.TestCase):
         result = Vector((1.996, 3.108, -4.554)).direction()
         result.round_coordinates(3)
         self.assertEqual(result, Vector((0.340,0.530,-0.777)), 'direction does not work')
+
     def test_dot_product_simple(self):
         v1 = Vector((1,2,-1))
         v2 = Vector((3,1,0))
         result = v1.dot_product(v2)
         self.assertEqual(result, 5, 'dot product does not work')
+
+    def test_dot_product_float_2d(self):
+        v1 = Vector((7.887,4.138))
+        v2 = Vector((-8.802,6.776))
+        result = v1.dot_product(v2)
+        result = round_float(result, 3)
+        self.assertEqual(result, -41.382, 'dot product does not work')
+
+    def test_dot_product_float_3d(self):
+        v1 = Vector((-5.955,-4.904,-1.874))
+        v2 = Vector((-4.496, -8.755, 7.103))
+        result = v1.dot_product(v2)
+        result = round_float(result, 3)
+        self.assertEqual(result, 56.397, 'dot product does not work')
 
     def test_angle_rad_simple(self):
         v1 = Vector((1,2,-1))
@@ -148,8 +167,30 @@ class VectorTestCase(unittest.TestCase):
         result = round_float(result, 2)
         self.assertEqual(result, 0.87, 'angle does not work')
 
+    def test_angle_rad_float(self):
+        v1 = Vector((3.183, -7.627))
+        v2 = Vector((-2.668, 5.319))
+        result = v1.angle(v2)
+        result = round_float(result, 3)
+        self.assertEqual(result, 3.072, 'angle does not work')
+
     def test_angle_degrees_simple(self):
         v1 = Vector((1,2,-1))
         v2 = Vector((3,1,0))
         result = v1.angle(v2, Vector.DEGREES)
         self.assertEqual(round(result), 50, 'angle does not work')
+    def test_angle_same_vector(self):
+        v1 = Vector((1,2,-1))
+        result = v1.angle(v1)
+        self.assertEqual(round(result), 0, 'angle does not work')
+    
+    def test_angle_degrees_float(self):
+        v1 = Vector((7.35, 0.221, 5.188))
+        v2 = Vector((2.751, 8.259, 3.985))
+        result = v1.angle(v2, Vector.DEGREES)
+        result = round_float(result, 3)
+        self.assertEqual(result, 60.276, 'angle does not work')
+
+    def test_angle_assert(self):
+        with self.assertRaises(ZeroDivisionError, msg='angle does not throw ZeroDivisionError if magnitude of either vector is 0'):
+            Vector((0,0,0)).angle(Vector((1,2,3)))
