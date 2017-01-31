@@ -123,12 +123,10 @@ class VectorTestCase(unittest.TestCase):
     
     def test_direction_float_2d(self):
         result = Vector((5.581, -2.136)).direction()
-        #5.976
         result.round_coordinates(3)
         self.assertEqual(result.coordinates, (0.934, -0.357), 'direction does not work')
     
     def test_direction_float_3d(self):
         result = Vector((1.996, 3.108, -4.554)).direction()
-        #5.864
         result.round_coordinates(3)
         self.assertEqual(result.coordinates, (0.340,0.530,-0.777), 'direction does not work')
