@@ -28,6 +28,10 @@ class VectorTestCase(unittest.TestCase):
     def test_eq_one_dimension(self):
         self.assertEqual(self.vector1d==Vector((1,)), True, 'eq does not work')
         self.assertEqual(self.vector1d==Vector((-1,)), False, 'eq does not work')
+    def test_round_coordinates(self):
+        vector = Vector((1.00001, 2.12348, -8274.125, 2))
+        vector.round_coordinates(2)
+        self.assertEqual(vector.coordinates, (1.00, 2.12, -8274.13, 2.00), 'round_coordinates does not work')
     def test_plus_1d(self):
         self.assertEqual(self.vector1d.plus(Vector((-1,))), Vector((0,)), 'plus does not work')
         self.assertEqual(self.vector1d, Vector((1,)), 'plus does not work - changes vector')

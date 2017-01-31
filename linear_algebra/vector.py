@@ -1,5 +1,5 @@
 import collections
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 class Vector:
     """
 
@@ -25,12 +25,19 @@ class Vector:
     def scalar_multiply(self, scalar):
         if isinstance(scalar, collections.Iterable):
             raise TypeError('value must not be iterable')
-        products = tuple([float(Decimal(str(coordinate))*Decimal(str(scalar))) for coordinate in self.coordinates ])
+        products = tuple([float(Decimal(coordinate)*Decimal(scalar)) for coordinate in self.coordinates ])
         return Vector(products)
 
-    def round_coordinates(self, num_decimals):
-        self.coordinates = tuple([round(coordinate, num_decimals) for coordinate in self.coordinates])
+    def round_coordinates(self, precision):
+        def round_coordinate(coordinate, precision):
+            return float(Decimal(str(coordinate)).quantize(Decimal(precision_str), rounding=ROUND_HALF_UP))
+        if isinstance(precision, collections.Iterable):
+            raise TypeError('value must not be iterable')
+        precision_str = '.{:0>{prec}d}'.format(1,prec=precision)
+        self.coordinates = tuple([round_coordinate(coordinate, precision) for coordinate in self.coordinates])
+
     def __str__(self):
         return str(self.coordinates)
+
     def __eq__(self, other):
         return self.coordinates==other.coordinates
