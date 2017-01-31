@@ -141,3 +141,15 @@ class VectorTestCase(unittest.TestCase):
         result = v1.dot_product(v2)
         self.assertEqual(result, 5, 'dot product does not work')
 
+    def test_angle_rad_simple(self):
+        v1 = Vector((1,2,-1))
+        v2 = Vector((3,1,0))
+        result = v1.angle(v2)
+        result = round_float(result, 2)
+        self.assertEqual(result, 0.87, 'angle does not work')
+
+    def test_angle_degrees_simple(self):
+        v1 = Vector((1,2,-1))
+        v2 = Vector((3,1,0))
+        result = v1.angle(v2, Vector.DEGREES)
+        self.assertEqual(round(result), 50, 'angle does not work')

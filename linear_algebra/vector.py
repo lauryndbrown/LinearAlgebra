@@ -1,9 +1,12 @@
 import collections
 from decimal import Decimal, ROUND_HALF_UP
+import math
 class Vector:
     """
 
     """
+    RADIANS = "radians"
+    DEGREES = "degrees"
     def __init__(self, coordinates):
         try:
             if not coordinates:
@@ -47,6 +50,13 @@ class Vector:
             raise ZeroDivisionError('zero vector has no direction')
     def dot_product(self, vector):
         return sum( a*b for a,b in zip(self.coordinates, vector.coordinates))
+
+    def angle(self, vector, unit=None):
+        theta = math.acos(self.dot_product(vector)/(self.magnitude()*vector.magnitude()))
+        if unit==Vector.RADIANS or unit==None:
+            return theta
+        else:
+            return math.degrees(theta)
     def round_coordinates(self, precision):
         """Round coordinates in a vector
            Uses decimal.ROUND_HALF_UP
