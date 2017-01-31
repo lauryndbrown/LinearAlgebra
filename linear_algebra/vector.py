@@ -45,6 +45,8 @@ class Vector:
             return self.scalar_multiply(self.magnitude()**-1)
         except ZeroDivisionError:
             raise ZeroDivisionError('zero vector has no direction')
+    def dot_product(self, vector):
+        return sum( a*b for a,b in zip(self.coordinates, vector.coordinates))
     def round_coordinates(self, precision):
         """Round coordinates in a vector
            Uses decimal.ROUND_HALF_UP
@@ -57,6 +59,9 @@ class Vector:
         self.coordinates = tuple([round_coordinate(coordinate) for coordinate in self.coordinates])
 
     def __str__(self):
+        return "Vector: {}".format(self.coordinates)
+
+    def __repr__(self):
         return str(self.coordinates)
 
     def __eq__(self, other):

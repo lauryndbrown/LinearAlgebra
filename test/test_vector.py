@@ -29,12 +29,17 @@ class VectorTestCase(unittest.TestCase):
         with self.assertRaises(TypeError, msg='init does not throw TypeError if coordinates are not iterable'):
                 Vector( 1 )
     
+    def test_repr_single_dimension(self):
+        self.assertEqual(repr(self.vector1d), "(1,)",'repr does not work')
+    
+    def test_repr_three_dimensions(self):
+        self.assertEqual(repr(self.vector3d), "(1, 2, 3)",'repr does not work')
+    
     def test_str_single_dimension(self):
-        self.assertEqual(str(self.vector1d), "(1,)",'str does not work')
+        self.assertEqual(str(self.vector1d), "Vector: (1,)",'str does not work')
     
     def test_str_three_dimensions(self):
-        self.assertEqual(str(self.vector3d), "(1, 2, 3)",'str does not work')
-    
+        self.assertEqual(str(self.vector3d), "Vector: (1, 2, 3)",'str does not work')
     def test_eq_three_dimensions(self):
         self.assertEqual(self.vector3d==Vector((1,2,3)), True,'eq does not work')
         self.assertEqual(Vector((-1,2,3))==self.vector3d, False,'eq does not work')
@@ -115,7 +120,7 @@ class VectorTestCase(unittest.TestCase):
     
     def test_direction_simple(self):
         result = Vector((2,2,2,2)).direction()
-        self.assertEqual(result.coordinates, (.5,.5,.5,.5), 'direction does not work')
+        self.assertEqual(result, Vector((.5,.5,.5,.5)), 'direction does not work')
     
     def test_direction_assert(self):
         with self.assertRaises(ZeroDivisionError, msg='direction does not throw ZeroDivisionError if magnitude is 0'):
@@ -124,9 +129,15 @@ class VectorTestCase(unittest.TestCase):
     def test_direction_float_2d(self):
         result = Vector((5.581, -2.136)).direction()
         result.round_coordinates(3)
-        self.assertEqual(result.coordinates, (0.934, -0.357), 'direction does not work')
+        self.assertEqual(result, Vector((0.934, -0.357)), 'direction does not work')
     
     def test_direction_float_3d(self):
         result = Vector((1.996, 3.108, -4.554)).direction()
         result.round_coordinates(3)
-        self.assertEqual(result.coordinates, (0.340,0.530,-0.777), 'direction does not work')
+        self.assertEqual(result, Vector((0.340,0.530,-0.777)), 'direction does not work')
+    def test_dot_product_simple(self):
+        v1 = Vector((1,2,-1))
+        v2 = Vector((3,1,0))
+        result = v1.dot_product(v2)
+        self.assertEqual(result, 5, 'dot product does not work')
+
